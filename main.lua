@@ -1,7 +1,8 @@
-print("Hello from Lua on Docker!!!!")
+
 
 
 local socket = require("socket")
+print("Hello from Lua on Docker!!!!")
 
 -- Railway の環境変数 PORT を利用（無ければ8080）
 local port = tonumber(os.getenv("PORT") or "8080")
