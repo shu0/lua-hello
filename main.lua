@@ -1,9 +1,8 @@
 -- Lua web server with Redis integration
 
-local socket = require("socket")
-print("socket:", socket)
-local http = require("socket.http")
-local ltn12 = require("ltn12")
+socket = require("socket") -- local を外す！
+http   = require("socket.http")
+ltn12  = require("ltn12")
 
 print("Hello from Lua on Docker!!!!")
 
