@@ -13,16 +13,8 @@
 --     client:close()
 -- end
 
-local socket        = require("socket")
-local http          = require("socket.http")
-local ltn12         = require("ltn12")
-
--- Upstash の接続情報を直書き
-local UPSTASH_URL   = "http://fly-lua-fly-redis.upstash.io:6379"
-local UPSTASH_TOKEN =
-"AZTqACQgZDg4ZjQyZmQtM2I4My00Mjk4LWIzYTYtNmFjYzVhMzAyMGY4ZWIyYjdlZDllMWE5NDA2MmE0OTQzYTc2YjI3MDllZmU="
-
-print("Hello from Lua on Docker!!!!")
+local http = require("socket.http")
+local ltn12 = require("ltn12")
 
 local port = tonumber(os.getenv("PORT") or "8080")
 local server = assert(socket.bind("*", port))
@@ -32,26 +24,28 @@ print("Listening on http://0.0.0.0:" .. port)
 while true do
     local client = server:accept()
 
-    -- ==== Redis REST API を叩く (GET foo) ====
     local resp = {}
-    local res, code, headers = http.request {
-        url = UPSTASH_URL .. "/get/foo",
+    http.request {
+        url = "http://fly-lua-fly-redis.upstash.io:6379/get/foo",
         method = "GET",
         headers = {
-            ["Authorization"] = "Bearer " .. UPSTASH_TOKEN
+            ["Authorization"] = "Bearer AZTqACQgZDg4ZjQyZmQtM2I4My00Mjk4LWIzYTYtNmFjYzVhMzAyMGY4ZWIyYjdlZDllMWE5NDA2MmE0OTQzYTc2YjI3MDllZmU="
         },
         sink = ltn12.sink.table(resp)
     }
 
-    local val = table.concat(resp)
-
-    -- ==== HTTP レスポンス ====
-    local body = "Hello from Lua! Redis says: " .. val .. "\n"
+    local response_body = "Hello from Lua! Redis says: " .. table.concat(resp) .. "\n"
     local response = "HTTP/1.1 200 OK\r\n" ..
         "Content-Type: text/plain\r\n" ..
-        "Content-Length: " .. #body .. "\r\n\r\n" ..
-        body
+        "Content-Length: " .. #response_body .. "\r\n\r\n" ..
+        response_body
 
     client:send(response)
     client:close()
 end
+-- local t = { "Hello", "World", "Lua" }
+-- print(table.concat(t, " ")) --> Hello World Lua
+-- print(table.concat(t, "-")) --> Hello-World-Lua
+
+-- local s = "Hello"
+-- print(#s)                   --> 5
