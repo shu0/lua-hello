@@ -1,6 +1,7 @@
 -- Lua web server with Redis integration
 
 local socket = require("socket")
+print("socket:", socket)
 local http = require("socket.http")
 local ltn12 = require("ltn12")
 
