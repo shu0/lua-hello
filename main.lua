@@ -9,6 +9,6 @@ print("Listening on http://0.0.0.0:" .. port)
 
 while true do
     local client = server:accept()
-    client:send("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nHello World from Lua!githubActionTest\n")
+    client:send("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nHello World from Lua!Github Action Test OK!!\n")
     client:close()
 end
